@@ -461,39 +461,41 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
+/* const merge = (left, right) => {
+  const result = [];
+  let i = 0;
+  let j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i] < right[j]) {
+      result.push(left[i]);
+      i += 1;
+    } else {
+      result.push(right[j]);
+      j += 1;
+    }
+  }
+  return [...result, ...left.slice(i), ...right.slice(j)];
+} */
 function sortByAsc(arr) {
-  if (!Array.isArray(arr) || arr.some((i) => typeof i !== 'number')) {
-    throw new Error('Error');
-  }
+  const newArray = arr;
+  for (let i = 1; i < newArray.length; i += 1) {
+    const currentValue = newArray[i];
+    let insertionIndex = i - 1;
 
-  function merge(left, right) {
-    const result = [];
-    let i = 0;
-    let j = 0;
-    while (i < left.length && j < right.length) {
-      if (left[i] <= right[j]) {
-        result.push(left[i]);
-        i += 1;
-      } else {
-        result.push(right[j]);
-        j += 1;
+    while (insertionIndex >= 0 && newArray[insertionIndex] > currentValue) {
+      insertionIndex -= 1;
+    }
+
+    const position = insertionIndex + 1;
+    if (position !== i) {
+      const temp = newArray[i];
+      for (let j = i; j > position; j -= 1) {
+        newArray[j] = newArray[j - 1];
       }
+      newArray[position] = temp;
     }
-    return result.concat(left.slice(i), right.slice(j));
   }
-
-  function sortArray(array) {
-    if (array.length <= 1) {
-      return array;
-    }
-    const middle = Math.floor(array.length / 2);
-    const left = sortArray(array.slice(0, middle));
-    const right = sortArray(array.slice(middle));
-
-    return merge(left, right);
-  }
-
-  return sortArray(arr);
+  return newArray;
 }
 
 /**
